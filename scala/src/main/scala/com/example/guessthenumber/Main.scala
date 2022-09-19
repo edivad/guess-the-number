@@ -6,7 +6,11 @@ class Random {
   def nextInt(n: Int): Int = util.Random.nextInt(n)
 }
 
-class Console {
+trait Console {
+  def printLine(s: String): Unit
+  def readLine(): String
+}
+class StdConsole extends Console {
   def printLine(s: String): Unit = println(s)
   def readLine(): String         = StdIn.readLine()
 }
@@ -39,6 +43,6 @@ class Program(random: Random, console: Console) {
 
 object Main {
   def main(args: Array[String]): Unit = {
-    new Program(new Random, new Console).run()
+    new Program(new Random, new StdConsole).run()
   }
 }

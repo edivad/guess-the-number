@@ -22,21 +22,17 @@ class Program(random: Random, console: Console) {
     while (!guessed) {
       val input       = console.readLine()
       val maybeNumber = input.toIntOption
-      guessed = maybeNumber.fold({
-        console.printLine("not a number")
-        false
-      })(number => {
-        if (number == toBeGuessed) {
-          console.printLine("Guessed")
-          true
-        } else if (number > toBeGuessed) {
-          console.printLine("Too high")
-          false
-        } else {
-          console.printLine("Too low")
-          false
-        }
-      })
+      val out = maybeNumber.fold("not a number") { number =>
+        if (number == toBeGuessed) "Guessed"
+        else if (number > toBeGuessed) "Too high"
+        else "Too low"
+      }
+      console.printLine(out)
+      guessed = maybeNumber.fold(false) { number =>
+        if (number == toBeGuessed) true
+        else if (number > toBeGuessed) false
+        else false
+      }
     }
   }
 }

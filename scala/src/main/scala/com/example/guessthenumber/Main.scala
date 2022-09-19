@@ -25,27 +25,27 @@ class Program(random: Random, console: Console) {
   case object TooLow       extends Result
 
   def run(): Unit = {
-    val toBeGuessed = random.nextInt(100)
-    @tailrec
-    def loop(): Unit = {
-      val input       = console.readLine()
-      val maybeNumber = input.toIntOption
-      val result = maybeNumber.fold(InvalidInput.asInstanceOf[Result]) { number =>
-        if (number == toBeGuessed) Guessed
-        else if (number > toBeGuessed) TooHigh
-        else TooLow
-      }
-      val out = result match
-        case InvalidInput => "not a number"
-        case Guessed      => "Guessed"
-        case TooHigh      => "Too high"
-        case TooLow       => "Too low"
-      console.printLine(out)
-      result match
-        case Guessed => ()
-        case _       => loop()
+    loop(random.nextInt(100))
+  }
+
+  @tailrec
+  private def loop(toBeGuessed: Int): Unit = {
+    val input       = console.readLine()
+    val maybeNumber = input.toIntOption
+    val result = maybeNumber.fold(InvalidInput.asInstanceOf[Result]) { number =>
+      if (number == toBeGuessed) Guessed
+      else if (number > toBeGuessed) TooHigh
+      else TooLow
     }
-    loop()
+    val out = result match
+      case InvalidInput => "not a number"
+      case Guessed      => "Guessed"
+      case TooHigh      => "Too high"
+      case TooLow       => "Too low"
+    console.printLine(out)
+    result match
+      case Guessed => ()
+      case _       => loop(toBeGuessed)
   }
 }
 

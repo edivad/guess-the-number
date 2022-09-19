@@ -1,6 +1,8 @@
 package test
 
-import com.example.guessthenumber.{Console, Program, Random, StdConsole}
+import com.example.guessthenumber.StdConsole
+import com.example.guessthenumber.programs.Program
+import com.example.guessthenumber.services.{Console, Random}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 

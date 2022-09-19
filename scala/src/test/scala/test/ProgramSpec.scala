@@ -1,6 +1,6 @@
 package test
 
-import com.example.guessthenumber.StdConsole
+import cats.Id
 import com.example.guessthenumber.programs.Program
 import com.example.guessthenumber.services.{Console, Random}
 import org.scalatest.matchers.should.Matchers
@@ -52,8 +52,8 @@ object ProgramSpec {
     override def nextInt(n: Int): Int = value
   }
 
-  def buffers(in: ListBuffer[String], out: ListBuffer[String]): Console = new Console {
-    override def readLine(): String         = in.remove(0)
-    override def printLine(s: String): Unit = out.addOne(s); ()
+  def buffers(in: ListBuffer[String], out: ListBuffer[String]): Console[Id] = new Console[Id] {
+    override def readLine(): Id[String]         = in.remove(0)
+    override def printLine(s: String): Id[Unit] = out.addOne(s); ()
   }
 }

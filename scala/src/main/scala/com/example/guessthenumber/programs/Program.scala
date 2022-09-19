@@ -1,10 +1,11 @@
 package com.example.guessthenumber.programs
 
+import cats.Id
 import com.example.guessthenumber.services.{Console, Random}
 
 import scala.annotation.tailrec
 
-class Program(random: Random, console: Console) {
+class Program(random: Random, console: Console[Id]) {
 
   sealed trait Result
   case object InvalidInput extends Result

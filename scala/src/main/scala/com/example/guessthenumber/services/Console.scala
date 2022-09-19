@@ -1,6 +1,6 @@
 package com.example.guessthenumber.services
 
-trait Console {
-  def printLine(s: String): Unit
-  def readLine(): String
+trait Console[F[_]] {
+  def printLine(s: String): F[Unit]
+  def readLine(): F[String]
 }

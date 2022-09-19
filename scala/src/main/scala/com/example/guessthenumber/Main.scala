@@ -1,21 +1,23 @@
 package com.example.guessthenumber
 
 import cats.Id
+import cats.effect.{IO, IOApp}
 import com.example.guessthenumber.programs.Program
 import com.example.guessthenumber.services.{Console, Random}
 
 import scala.annotation.tailrec
 import scala.io.StdIn
 
-object Main {
-  val random: Random[Id] = Random.make[Id]
+object Main extends IOApp.Simple {
 
-  val console: Console[Id] = new Console[Id] {
-    def printLine(s: String): Id[Unit] = println(s)
-    def readLine(): Id[String]         = StdIn.readLine()
+  private val random = Random.make[IO]
+
+  private val console = new Console[IO] {
+    def printLine(s: String): IO[Unit] = IO.println(s)
+    def readLine(): IO[String]         = IO.readLine
   }
 
-  def main(args: Array[String]): Unit = {
-    new Program(random, console).run()
-  }
+  private val program = new Program(random, console)
+
+  def run: IO[Unit] = program.run()
 }

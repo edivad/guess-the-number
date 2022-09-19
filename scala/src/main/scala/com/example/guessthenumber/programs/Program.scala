@@ -1,7 +1,6 @@
 package com.example.guessthenumber.programs
 
 import cats.implicits.{toFlatMapOps, toFunctorOps}
-import cats.instances.{int, string}
 import cats.syntax.{flatMap, functor}
 import cats.{Applicative, Id, Monad}
 import com.example.guessthenumber.services.{Console, Random}

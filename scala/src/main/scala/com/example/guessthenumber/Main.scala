@@ -1,5 +1,6 @@
 package com.example.guessthenumber
 
+import scala.annotation.tailrec
 import scala.io.StdIn
 
 class Random {
@@ -25,8 +26,8 @@ class Program(random: Random, console: Console) {
 
   def run(): Unit = {
     val toBeGuessed = random.nextInt(100)
-    var guessed     = false
-    while (!guessed) {
+    @tailrec
+    def loop(): Unit = {
       val input       = console.readLine()
       val maybeNumber = input.toIntOption
       val result = maybeNumber.fold(InvalidInput.asInstanceOf[Result]) { number =>
@@ -40,10 +41,11 @@ class Program(random: Random, console: Console) {
         case TooHigh      => "Too high"
         case TooLow       => "Too low"
       console.printLine(out)
-      guessed = result match
-        case Guessed => true
-        case _       => false
+      result match
+        case Guessed => ()
+        case _       => loop()
     }
+    loop()
   }
 }
 

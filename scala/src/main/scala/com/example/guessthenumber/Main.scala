@@ -2,28 +2,43 @@ package com.example.guessthenumber
 
 import scala.io.StdIn
 
-object Main {
-  def main(args: Array[String]): Unit = {
-    val toBeGuessed = util.Random.nextInt(100)
+class Random {
+  def nextInt(n: Int): Int = util.Random.nextInt(n)
+}
+
+class Console {
+  def printLine(s: String): Unit = println(s)
+  def readLine(): String         = StdIn.readLine()
+}
+
+class Program(random: Random, console: Console) {
+  def run(): Unit = {
+    val toBeGuessed = random.nextInt(100)
     var guessed     = false
     while (!guessed) {
-      val input       = StdIn.readLine()
+      val input       = console.readLine()
       val maybeNumber = input.toIntOption
       guessed = maybeNumber.fold({
-        println("not a number")
+        console.printLine("not a number")
         false
       })(number => {
         if (number == toBeGuessed) {
-          println("Guessed")
+          console.printLine("Guessed")
           true
         } else if (number > toBeGuessed) {
-          println("Too high")
+          console.printLine("Too high")
           false
         } else {
-          println("Too low")
+          console.printLine("Too low")
           false
         }
       })
     }
+  }
+}
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    new Program(new Random, new Console).run()
   }
 }

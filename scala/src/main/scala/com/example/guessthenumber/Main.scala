@@ -8,12 +8,14 @@ import scala.annotation.tailrec
 import scala.io.StdIn
 
 object Main {
-  class StdConsole extends Console[Id] {
+  val random: Random[Id] = Random.make[Id]
+
+  val console: Console[Id] = new Console[Id] {
     def printLine(s: String): Id[Unit] = println(s)
     def readLine(): Id[String]         = StdIn.readLine()
   }
 
   def main(args: Array[String]): Unit = {
-    new Program(new Random, new StdConsole).run()
+    new Program(random, console).run()
   }
 }

@@ -48,8 +48,8 @@ class ProgramSpec extends AnyWordSpecLike with Matchers {
 }
 
 object ProgramSpec {
-  def fixed(value: Int): Random = new Random {
-    override def nextInt(n: Int): Int = value
+  def fixed(value: Int): Random[Id] = new Random[Id] {
+    override def nextInt(n: Int): Id[Int] = value
   }
 
   def buffers(in: ListBuffer[String], out: ListBuffer[String]): Console[Id] = new Console[Id] {

@@ -16,23 +16,33 @@ class StdConsole extends Console {
 }
 
 class Program(random: Random, console: Console) {
+
+  sealed trait Result
+  case object InvalidInput extends Result
+  case object Guessed      extends Result
+  case object TooHigh      extends Result
+  case object TooLow       extends Result
+
   def run(): Unit = {
     val toBeGuessed = random.nextInt(100)
     var guessed     = false
     while (!guessed) {
       val input       = console.readLine()
       val maybeNumber = input.toIntOption
-      val out = maybeNumber.fold("not a number") { number =>
-        if (number == toBeGuessed) "Guessed"
-        else if (number > toBeGuessed) "Too high"
-        else "Too low"
+      val result = maybeNumber.fold(InvalidInput.asInstanceOf[Result]) { number =>
+        if (number == toBeGuessed) Guessed
+        else if (number > toBeGuessed) TooHigh
+        else TooLow
       }
+      val out = result match
+        case InvalidInput => "not a number"
+        case Guessed      => "Guessed"
+        case TooHigh      => "Too high"
+        case TooLow       => "Too low"
       console.printLine(out)
-      guessed = maybeNumber.fold(false) { number =>
-        if (number == toBeGuessed) true
-        else if (number > toBeGuessed) false
-        else false
-      }
+      guessed = result match
+        case Guessed => true
+        case _       => false
     }
   }
 }

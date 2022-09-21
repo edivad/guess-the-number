@@ -8,12 +8,10 @@ import com.example.guessthenumber.services.{Console, Random}
 import scala.annotation.tailrec
 
 class Program[F[_]: Monad](random: Random[F], console: Console[F]) {
+  import Result.*
 
-  sealed trait Result
-  case object InvalidInput extends Result
-  case object Guessed      extends Result
-  case object TooHigh      extends Result
-  case object TooLow       extends Result
+  enum Result:
+    case InvalidInput, Guessed, TooHigh, TooLow
 
   def run(): F[Unit] = for {
     toBeGuessed <- random.nextInt(100)
@@ -34,11 +32,12 @@ class Program[F[_]: Monad](random: Random[F], console: Console[F]) {
   private val exit = Applicative[F].pure(())
 
   private def check(toBeGuessed: Int, input: String): F[Result] = {
-    val result = input.toIntOption
-      .fold(InvalidInput) { number =>
-        if (number == toBeGuessed) Guessed
-        else if (number > toBeGuessed) TooHigh
-        else TooLow
+    val result: Result = input.toIntOption
+      .map(_.compare(toBeGuessed))
+      .fold(InvalidInput) {
+        case 0  => Guessed
+        case 1  => TooHigh
+        case -1 => TooLow
       }
     Applicative[F].pure(result)
   }
